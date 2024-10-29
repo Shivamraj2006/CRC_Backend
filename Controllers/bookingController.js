@@ -62,5 +62,5 @@ const deleteBooking = async (req, res) => {
 export default {
     getBookings,
     createBooking,
-    deleteBookings
+    deleteBooking
 }

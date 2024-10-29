@@ -11,11 +11,7 @@ const getBookings = async (req, res) => {
             return;
         }
 
-        const filteredBookings = bookings.filter(booking => 
-            booking.RoomID === roomId && booking.Date === date 
-        );
-
-        filteredBookings.sort((a, b) => a.BookedFrom.localeCompare(b.BookedFrom));
+        bookings.sort((a, b) => a.BookedFrom.localeCompare(b.BookedFrom));
 
         res.status(200).json(filteredBookings);
     } catch (error) {

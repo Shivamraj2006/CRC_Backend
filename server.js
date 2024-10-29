@@ -1,5 +1,5 @@
 import express from 'express';
-import connectDB from './config/db.js';
+import connectDB from './Model/db.js';
 import bookingRoutes from './Routes/bookings.js'
 
 const app = express();

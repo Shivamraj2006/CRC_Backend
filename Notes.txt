@@ -1,0 +1,1 @@
+1. Pass RoomId and Date with url

@@ -1,4 +1,4 @@
-import Booking from '../models/Booking.js';
+import Booking from '../Model/Booking.js';
 
 const getBookings = async (req, res) => {
     const roomId = req.query.roomId;

@@ -3,7 +3,7 @@ import {createBooking,getBookings,deleteBookings} from '../Controllers/bookingCo
 
 const router = express.Router();
 
-router.get('/fetch',getBookings);
+router.get('/all',getBookings);
 router.post('/create',createBooking);
 router.delete('/delete', deleteBookings);
 

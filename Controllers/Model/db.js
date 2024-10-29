@@ -1,11 +1,17 @@
-[
-    {
-        "RoomID": "1-1",
-        "Guest": "IDS",
-        "Date": "2024-10-29",
-        "BookedFrom": "08:00",
-        "BookedTill": "08:00",
-        "Status": "Occupied",
+// db.js
+import mongoose from 'mongoose';
 
+const connectDB = async () => {
+    try {
+        await mongoose.connect('mongodb://localhost:27017/yourdbname', {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+        });
+        console.log('MongoDB connected');
+    } catch (error) {
+        console.error('MongoDB connection error:', error);
+        process.exit(1); // Exit the process with failure
     }
-]
+};
+
+export default connectDB;

@@ -1,41 +1,67 @@
-const getBookings = (req, res) => {
+import Booking from '../models/Booking.js';
+
+const getBookings = async (req, res) => {
     const roomId = req.query.roomId;
     const date = req.query.date || new Date().toISOString().split('T')[0];
-    const startTime = req.query.startTime;
 
-    const filteredBookings = bookings.filter(booking => 
-        booking.roomId == roomId && booking.date === date 
-    );
+    try {
+        const bookings = await Booking.find({ RoomID: roomId, Date: date });
 
-    filteredBookings.sort((a, b) => a.startTime.localeCompare(b.startTime));
+        if (bookings.length === 0) {
+            return;
+        }
 
-    // Respond with filtered and sorted bookings
-    res.json(filteredBookings);    
+        const filteredBookings = bookings.filter(booking => 
+            booking.RoomID === roomId && booking.Date === date 
+        );
+
+        filteredBookings.sort((a, b) => a.BookedFrom.localeCompare(b.BookedFrom));
+
+        res.status(200).json(filteredBookings);
+    } catch (error) {
+        console.error('Error fetching bookings:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
 };
 
-const createBooking = (req, res) => {
-    const newBooking = {
-        id: data.bookings?.length ? data.bookings[data.bookings.length - 1].id + 1 : 1,
-        //Add data
-    }
+const createBooking = async (req, res) => {
+    const { RoomID, Guest, Date, BookedFrom, BookedTill, Status } = req.body;
 
-    if (!newBooking.data) {
-        return res.status(400).json({ 'message': 'Input Data is required.' });
-    }
+    const newBooking = new Booking({
+        RoomID,
+        Guest,
+        Date,
+        BookedFrom,
+        BookedTill,
+        Status,
+    });
 
-    data.setbookings([...data.bookings, newBooking]);
-    res.status(201).json(data.bookings);
-}
-
-const deleteBookings = (req, res) => {
-    const booking = data.bookings.find(book => book.id === parseInt(req.body.id));
-    if (!booking) {
-        return res.status(400).json({ "message": `Booking ID ${req.body.id} not found` });
+    try {
+        const savedBooking = await newBooking.save(); 
+        res.status(201).json(savedBooking); 
+    } catch (error) {
+        console.error('Error creating booking:', error);
+        res.status(400).json({ message: 'Error creating booking', error });
     }
-    const filteredArray = data.bookings.filter(book => book.id !== parseInt(req.body.id));
-    data.setbookings([...filteredArray]);
-    res.json(data.bookings);
-}
+};
+
+const deleteBooking = async (req, res) => {
+    const { roomId, date } = req.params;
+
+    try {
+        const deletedBooking = await Booking.findOneAndDelete({ RoomID: roomId, Date: date });
+
+        if (!deletedBooking) {
+            return res.status(404).json({ message: `Booking for Room ID ${roomId} on ${date} not found` });
+        }
+
+        res.json({ message: `Booking for Room ID ${roomId} on ${date} deleted successfully`, deletedBooking });
+    } catch (error) {
+        console.error('Error deleting booking:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+};
+
 
 export default {
     getBookings,

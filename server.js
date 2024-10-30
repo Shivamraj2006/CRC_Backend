@@ -1,5 +1,5 @@
 import express from 'express';
-import connectDB from './Model/db.js';
+import connectDB from './Database/db.js';
 import bookingRoutes from './Routes/bookings.js'
 
 const app = express();
@@ -9,7 +9,7 @@ app.use(express.json());
 
 connectDB();
 
-app.use('/api/bookings' , bookingRoutes);
+app.use('/bookings' , bookingRoutes);
 
 app.listen(PORT,() => {
     console.log(`Server is listening on port ${PORT}`);

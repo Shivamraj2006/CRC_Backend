@@ -1,6 +1,6 @@
 import Booking from '../Database/Booking.js';
 
-const getBookings = async (req, res) => {
+export const getBookings = async (req, res) => {
     const roomId = req.query.roomId;
     const date = req.query.date || new Date().toISOString().split('T')[0];
 
@@ -20,7 +20,7 @@ const getBookings = async (req, res) => {
     }
 };
 
-const createBooking = async (req, res) => {
+export const createBooking = async (req, res) => {
     const { RoomID, Guest, Date, BookedFrom, BookedTill, Status } = req.body;
 
     const newBooking = new Booking({
@@ -41,7 +41,7 @@ const createBooking = async (req, res) => {
     }
 };
 
-const deleteBooking = async (req, res) => {
+export const deleteBooking = async (req, res) => {
     const { roomId, date } = req.params;
 
     try {
@@ -57,10 +57,3 @@ const deleteBooking = async (req, res) => {
         res.status(500).json({ message: 'Server error' });
     }
 };
-
-
-export default {
-    getBookings,
-    createBooking,
-    deleteBooking
-}

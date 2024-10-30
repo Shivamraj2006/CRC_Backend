@@ -4,11 +4,16 @@ export const getBookings = async (req, res) => {
     const roomId = req.query.roomId;
     const date = req.query.date || new Date().toISOString().split('T')[0];
 
+    console.log(`${roomId} and ${date}`);//debug
+    console.time('getBookings');//debug
+
     try {
         const bookings = await Booking.find({ RoomID: roomId, Date: date });
 
+        console.timeEnd('getBookings'); //debug
+
         if (bookings.length === 0) {
-            return;
+            return res.status(404).json({ message: 'No bookings found' });
         }
 
         bookings.sort((a, b) => a.BookedFrom.localeCompare(b.BookedFrom));

@@ -1,14 +1,14 @@
 import Booking from '../Database/Booking.js';
 
 export const getBookings = async (req, res) => {
-    const roomId = req.query.roomId;
+    const roomName = req.query.roomName;
     const date = req.query.date || new Date().toISOString().split('T')[0];
 
-    console.log(`${roomId} and ${date}`);//debug
+    console.log(`${roomName} and ${date}`);//debug
     console.time('getBookings');//debug
 
     try {
-        const bookings = await Booking.find({ RoomID: roomId, Date: date });
+        const bookings = await Booking.find({ RoomName: roomName, Date: date });
 
         console.timeEnd('getBookings'); //debug
 
@@ -18,7 +18,7 @@ export const getBookings = async (req, res) => {
 
         bookings.sort((a, b) => a.BookedFrom.localeCompare(b.BookedFrom));
 
-        res.status(200).json(filteredBookings);
+        res.status(200).json(bookings);
     } catch (error) {
         console.error('Error fetching bookings:', error);
         res.status(500).json({ message: 'Server error' });
@@ -26,10 +26,10 @@ export const getBookings = async (req, res) => {
 };
 
 export const createBooking = async (req, res) => {
-    const { RoomID, Guest, Date, BookedFrom, BookedTill, Status } = req.body;
+    const { RoomName, Guest, Date, BookedFrom, BookedTill, Status } = req.body;
 
     const newBooking = new Booking({
-        RoomID,
+        RoomName,
         Guest,
         Date,
         BookedFrom,
@@ -47,18 +47,18 @@ export const createBooking = async (req, res) => {
 };
 
 export const deleteBooking = async (req, res) => {
-    const { roomId, date } = req.params;
+    const { id } = req.params; 
 
     try {
-        const deletedBooking = await Booking.findOneAndDelete({ RoomID: roomId, Date: date });
+        const deletedBooking = await Booking.findByIdAndDelete(id);
 
         if (!deletedBooking) {
-            return res.status(404).json({ message: `Booking for Room ID ${roomId} on ${date} not found` });
+            return res.status(404).json({ message: `Booking with ID ${id} not found` });
         }
 
-        res.json({ message: `Booking for Room ID ${roomId} on ${date} deleted successfully`, deletedBooking });
+        res.json({ message: `Booking with ID ${id} deleted successfully`, deletedBooking });
     } catch (error) {
-        console.error('Error deleting booking:', error);
+        console.error(`Error deleting booking with ID ${id}:`, error);
         res.status(500).json({ message: 'Server error' });
     }
 };

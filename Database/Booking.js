@@ -2,7 +2,7 @@
 import mongoose from 'mongoose';
 
 const bookingSchema = new mongoose.Schema({
-    RoomID: {
+    RoomName: {
         type: String,
         required: true,
     },

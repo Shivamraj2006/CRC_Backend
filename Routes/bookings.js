@@ -5,6 +5,6 @@ const router = express.Router();
 
 router.get('/all', getBookings);
 router.post('/create', createBooking);
-router.delete('/delete', deleteBooking);
+router.delete('/delete/:id', deleteBooking);
 
 export default router;

@@ -6,10 +6,17 @@ const bookingSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    Guest: {
+
+    OrganiserName: {
         type: String,
         required: true,
     },
+    
+    EventName: {
+        type: String,
+        required: true,
+    },
+
     Date: {
         type: String, 
         required: true,
@@ -25,6 +32,7 @@ const bookingSchema = new mongoose.Schema({
     Status: {
         type: String,
         required: true,
+        default: "booked",
     },
 });
 
